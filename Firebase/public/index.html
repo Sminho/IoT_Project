@@ -1,21 +1,44 @@
 <!--
-	 6/12
+
+   @author 신민호 <smh9800@g.skku.edu>
+   @file 자바스크립트, Jquery를 사용하여 작성됨
+   @requires firebasejs/8.6.5
+   @requires jquery 
+
+   참고 : Firebase version 8 문법을 따라서 작성됨(9로 업데이트 하려면 Namespace 방식이라 다 고쳐야함)
+
+   Changelog
+	2022/6/12
 	 웹 어플리케이션 틀 완성
 	 index(홈페이지), setting(설정), control(제어), FAQ로 각 페이지 HTML파일로 연결되고
 	 설정->manual로 연결해서 여기서 값들을 DB(할 수 있으면 mysql, 아니면 txt파일)로 처리하고
 	 제어페이지에서 버튼을 누르면 이게 동작인지 제어->manual 페이지로 연결해서 동작하라 값 씌우기
 
-	 6/30
+	 2022/6/30
 	 firebase 호스팅 연동
 
-	 7/1
-	 firebase db이용해서 동작
+	 2022/7/1
+	 firebase db 이용해서 동작추가 시작
 
-	 7/3 
+	 2022/7/3 
 	 까먹고 있던 favicon 추가
 
-	 7/8 
+	 2022/7/8 
 	 db연동 못한거 마무리
+
+	 ~2022/7/30
+	 기본적인 기능 구현
+
+	 2022/8/23
+	 주석 추가
+
+	 ~2022/9/20
+	 ICT 챌린지 과제 수행
+	 
+	 2023/04/08
+	 ITRC 인재양성대전 데모를 위한 일부 수정(다이얼 추가 등)
+
+	 
  -->
 
 <!DOCTYPE html>
@@ -46,7 +69,7 @@
 			<li><a href="/index.html">Home</a></li>
 			<li><a href="/setting.html">설정</a></li>
 			<li><a href="/control.html">제어</a></li>
-			<li><a href="/faq.html">FAQ</a></li>
+			<li><a href="/monitor.html">모니터링</a></li>
 		</ul>
 
 		<ul class="navbar__links">

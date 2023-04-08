@@ -1,0 +1,80 @@
+<!--
+	Changelog->index.html
+	
+	동작 : 
+	1. 각 제품별 전원버튼 누르면 날짜에 맞게 카운터 +1씩함
+	2. 설정에 저장해놨던 전력량*카운터 = 전력소모량으로 계산
+	3. 그래프로 출력
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<link rel="shortcut icon" href="./image/favicon.ico" thpe="image/x-icon">
+	<title>Blue_Earth</title>
+	<script src="https://kit.fontawesome.com/97eb2b6065.js" crossorigin="anonymous"></script>
+	<script src="main.js" defer></script>
+	<script
+  	src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  	integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  	crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+</head>
+<body>
+	<nav class="navbar">
+		<div class="navbar__logo"> 
+			<i class="fa-solid fa-earth-asia"></i>
+			<a href="">Blue_Earth</a>
+		</div>
+
+		<ul class="navbar__menu">
+			<li><a href="/index.html">Home</a></li>
+			<li><a href="/setting.html">설정</a></li>
+			<li><a href="/control.html">제어</a></li>
+			<li><a href="/monitor.html">모니터링</a></li>
+		</ul>
+
+		<ul class="navbar__links">
+			<li><a href="http://instagram.com/minho_980"><i class="fa-brands fa-instagram"></i></a></li>
+			<li><a href="http://skku.edu"><i class="fa-solid fa-school"></i></a></li>  
+		</ul>
+
+		<a href="#" class="navbar__toggleBtn">
+			<i class="fa-solid fa-bars"></i>
+		</a>
+	</nav>
+    <h1 class="title">Report<form>
+		<select class = "machine" id ="machine_list" onchange="selected2()">
+		<option value = "">가전제품 선택</option></select></form></h1>
+<!--x축에는 일주일 동안 날짜, y축에는 사용횟수 그래프 표시-->
+	<div class="graph">
+		<!--차트 위에 이름-->
+		<h2 class="graph__title">주간 사용 전력량 추정치 : <span id = "Watt"></span></h2>
+		<canvas id="myChart1"></canvas>
+	</div>
+	<script>
+		
+	</script>
+
+	<div class="graph">
+		<h2 class="graph__title">일별 사용한 횟수 : <span id = "Work_count"></span></h2>
+		<canvas id="myChart2"></canvas>
+	</div>
+
+	<script>
+		$('.graph').hide();
+	</script>
+	
+	
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+</body>
+
+</html>

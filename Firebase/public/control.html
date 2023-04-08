@@ -1,3 +1,12 @@
+<!--
+	Changelog->index.html
+	
+	동작 : 
+	1. 제품 선택하면 리스트로 버튼 8개 표시, Dial 표시
+	2. 버튼을 동작하면 각 버튼의 함수 호출(main.js에 있음)
+	3. 예약 작업저장해둔거하고 시간이 맞으면 작동하게 함(이거는 미완?)
+
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +34,7 @@
 			<li><a href="/index.html">Home</a></li>
 			<li><a href="/setting.html">설정</a></li>
 			<li><a href="/control.html">제어</a></li>
-			<li><a href="/faq.html">FAQ</a></li>
+			<li><a href="/monitor.html">모니터링</a></li>
 		</ul>
 		<ul class="navbar__links">
 			<li><a href="http://instagram.com/minho_980"><i class="fa-brands fa-instagram"></i></a></li>
@@ -36,7 +45,7 @@
 			<i class="fa-solid fa-bars"></i>
 		</a>
 	</nav>
-    <h1 class="title">Control <form>
+    <h1 class="title">Control <input class="work_Btn" type="button" id="work_Btn" value="동작" onclick = "control9();"><form>
 		<select class = "machine" id ="machine_list" onchange="selected0()">
 		<option value = "">가전제품 선택</option></select>
 	  </form></h1>
@@ -47,7 +56,12 @@
 	  </div>
 	  <div class = "Connection_Status" id = "Connection_Status">
 	</div>
-		  
+	<ul class="Dial__list" id = "Dial__list" style="list-style: none;">
+		<div class="rotate-container" id="rotate-container">
+			<img class="rotate-image" id="rotate-image" src="./image/wheel.png" alt="wheel">
+		</div>
+		
+	</ul>
 	<ul class="Btn__list" id = "Btn__list" style="list-style: none;">
 		<li><input class="control_Btn" type="button" id="motor1" value="NONE" onclick = "control1();"><span id = "Btn1_count"> 0 회</span></li>
 		<li><input class="control_Btn" type="button" id="motor2" value="NONE" onclick = "control2();"><span id = "Btn2_count"> 0 회</span></li>
@@ -58,6 +72,7 @@
     	<li><input class="control_Btn" type="button" id="motor7" value="NONE" onclick = "control7();"><span id = "Btn7_count"> 0 회</span></li>
 		<li><input class="control_Btn" type="button" id="motor8" value="NONE" onclick = "control8();"><span id = "Btn8_count"> 0 회</span></li>
 	</ul>
+	
 
 	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
@@ -65,13 +80,21 @@
 	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
 	<script>
+
 	$('.Connection_Status').hide();
 	$('.product-img-div').hide();
 	$('.product-title').hide();
 	$('.Btn__list').hide();
 
+	$('.Dial__list').hide();
+	$('.work_Btn').hide();
+    $('#Dial_input').hide();
+    $('#Dial_output').hide();
+    $('#Btn9_count').hide();
 	
-	
+	/**
+	 * setInterval에서 호출하여 1초마다 연결상태를 표시하는 div 내용만 업데이트 해주는 함수  Status는 동작을 누르면 0이 되며 읽게 만들고, 읽는 중에는 1, 동작중에는 2, 평상시는 3으로 둔다.
+	 */
 	function autoRefresh_div(){
 		var selectedMachine = document.getElementById("machine_list");   
   		let selectValue = selectedMachine.options[selectedMachine.selectedIndex].value; 
@@ -112,6 +135,7 @@
 		}
 	}
 	setInterval('autoRefresh_div()', 1000);
+	
 	
 	</script>
 </body>

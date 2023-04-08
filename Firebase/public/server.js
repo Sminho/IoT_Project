@@ -20,8 +20,8 @@ var app = http.createServer(function(req, res){
     if(path=="/control"){
         res.write(fs.readFileSync("control.html"));
     }
-    //FAQ 페이지
-    if(path=="/faq"){
+    //모니터링 페이지
+    if(path=="/monitor"){
         res.write(fs.readFileSync("faq.html"));
     }  
 })

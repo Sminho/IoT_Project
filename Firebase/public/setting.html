@@ -1,0 +1,175 @@
+<!--
+	Changelog->index.html
+	
+	동작 : 
+	1. ChooseSet 선택박스로 어떤걸 설정할지 선택,
+	2. 예약이면 입력창들 표시, machine_list 선택해서 버튼 이름들을 불러옴, Btn_set1 누르면 realtime database에 입력
+	3. 장치설정이면 입력창들 표시, Btn_set0 누르면 설정이 firestore database로 machine 컬렉션, 장치이름 document로 가서, field에 입력한 내용 저장
+	
+	미완. Tesseract or Tensorflow.js로 사진에서 버튼 이름 추출 기능(현재 반쪽짜리로 동작함)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<link rel="shortcut icon" href="./image/favicon.ico" thpe="image/x-icon">
+	<title>Blue_Earth</title>
+	<script src="https://kit.fontawesome.com/97eb2b6065.js" crossorigin="anonymous"></script>
+	<script src="main.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
+	<script
+  	src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  	integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  	crossorigin="anonymous"></script>
+
+	<!--tesseract.js by cdn, for text-->
+	
+	<!-- v2 -->
+	<script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
+	<script type="module">
+		let data;
+		const recognize = async ({ target: { files }  }) => {
+		const { data: { text } } = await Tesseract.recognize(files[0], 'kor', {
+			corePath: 'https://unpkg.com/tesseract.js-core@v2.0.0/tesseract-core.wasm.js',
+			logger: m => document.getElementById("Work_Status").innerHTML = "이미지 처리 중 : "+m.progress*100+"%",
+			
+		});
+		console.log(text);
+		data = text;
+		alert("이미지 속의 글자들을 읽었습니다.");
+	  }
+	  const elm = document.getElementById('image');
+	  elm.addEventListener('change', recognize);
+	  $('#motor2_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor2_name").value= input;
+	  });
+	  $('#motor3_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor3_name").value= input;
+	  });
+	  $('#motor4_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor4_name").value= input;
+	  });
+	  $('#motor5_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor5_name").value= input;
+	  });
+	  $('#motor6_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor6_name").value= input;
+	  });
+	  $('#motor7_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor7_name").value= input;
+	  });
+	  $('#motor8_name').click(function(){
+		var input = prompt('출력된 텍스트에서 원하는 값을 입력하세요.\n'+data);
+		document.getElementById("motor8_name").value= input;
+	  });
+	</script>
+	
+</head>
+<body>
+	<nav class="navbar">
+		<div class="navbar__logo"> 
+			<i class="fa-solid fa-earth-asia"></i>
+			<a href="">Blue_Earth</a>
+		</div>
+
+		<ul class="navbar__menu">
+			<li><a href="/index.html">Home</a></li>
+			<li><a href="/setting.html">설정</a></li>
+			<li><a href="/control.html">제어</a></li>
+			<li><a href="/monitor.html">모니터링</a></li>
+		</ul>
+
+		<ul class="navbar__links">
+			<li><a href="http://instagram.com/minho_980"><i class="fa-brands fa-instagram"></i></a></li>
+			<li><a href="http://skku.edu"><i class="fa-solid fa-school"></i></a></li>  
+		</ul>
+
+		<a href="#" class="navbar__toggleBtn">
+			<i class="fa-solid fa-bars"></i>
+		</a>
+	</nav>
+    <h1 class="title">Setting <button class = "Btn_set0" id = "Btn_set0" >SET</button><button class = "Btn_set1" id = "Btn_set1" >SET</button>
+		<form><select class = "ChooseSet" id ="ChooseSet" onchange="selected1()">
+		<option value = "">설정할 옵션 선택</option>
+		<option value = "장치">장치 설정</option>
+		<option value = "예약">예약 설정</option></select></form></h1>
+
+		<div class="device" id="device">장치명 : <input class="input_t" type="text" id="machine_name" placeholder="장치의 이름을 입력해주세요."></input><br>
+			버튼 사진 : <input class="input_n" type="file" class="input_t" id="image"><br>다이얼 사용여부<input type='checkbox' id='Dial' value='Dial' /></div>
+			<div class = "Work_Status" id = "Work_Status"></div>
+			
+		<ul class="Input__list" id ="Input__list" style="list-style: none;">
+		<li>1번 버튼 이름 : <input class="input_t" type="text" id="motor1_name" value="전원"></input></li>
+	    <li>1번 버튼 각도 : <input class="input_n"type="number" id="motor1_angle" placeholder="0~180도 이내 입력."></input></li><br>
+        <li>2번 버튼 이름 : <input class="input_t" type="text" id="motor2_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>2번 버튼 각도 : <input class="input_n"type="number" id="motor2_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>3번 버튼 이름 : <input class="input_t" type="text" id="motor3_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>3번 버튼 각도 : <input class="input_n"type="number" id="motor3_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>4번 버튼 이름 : <input class="input_t" type="text" id="motor4_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>4번 버튼 각도 : <input class="input_n"type="number" id="motor4_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>5번 버튼 이름 : <input class="input_t" type="text" id="motor5_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>5번 버튼 각도 : <input class="input_n"type="number" id="motor5_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>6번 버튼 이름 : <input class="input_t" type="text" id="motor6_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>6번 버튼 각도 : <input class="input_n"type="number" id="motor6_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>7번 버튼 이름 : <input class="input_t" type="text" id="motor7_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>7번 버튼 각도 : <input class="input_n"type="number" id="motor7_angle" placeholder="0~180도 이내 입력."></input></li><br>
+		<li>8번 버튼 이름 : <input class="input_t" type="text" id="motor8_name" placeholder="버튼의 이름을 입력해주세요."></input></li>
+	    <li>8번 버튼 각도 : <input class="input_n"type="number" id="motor8_angle" placeholder="0~180도 이내 입력."></input></li><br></ul>
+		<ul class="Input__list" id ="Input__list" style="list-style: none;">
+		<li>1회 소비전력 : <input class="input_n" type="number" id="power_consume" placeholder="에너지 소비 효율로 계산"></input></li>
+		</ul>
+		<div class="device1" id="device1">설정할 가전제품 : <select class = "machine" id ="machine_list" onchange="selected2()">
+			<option value = "">가전제품 선택</option></select><br>
+			예약시간 : <input class="input_t" type="text" id="ReservationTime" placeholder="시간:분:초 형식(00:00:00)"></input></div>
+		<ul class="Reservation__Input__list" id ="Reservation__Input__list" style="list-style: none;">
+			<li><span id = "Btn1_name">버튼1 횟수 : </span><input class="input_t"type="number" id="Reservation_motor1_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn11_name">버튼1 순서 : </span><input class="input_n"type="number" id="Reservation_motor1_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn2_name">버튼2 횟수 : </span><input class="input_t"type="number" id="Reservation_motor2_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn22_name">버튼2 순서 : </span><input class="input_n"type="number" id="Reservation_motor2_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn3_name">버튼3 횟수 : </span><input class="input_t"type="number" id="Reservation_motor3_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn33_name">버튼3 순서 : </span><input class="input_n"type="number" id="Reservation_motor3_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn4_name">버튼4 횟수 : </span><input class="input_t"type="number" id="Reservation_motor4_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn44_name">버튼4 순서 : </span><input class="input_n"type="number" id="Reservation_motor4_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn5_name">버튼5 횟수 : </span><input class="input_t"type="number" id="Reservation_motor5_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn55_name">버튼5 순서 : </span><input class="input_n"type="number" id="Reservation_motor5_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn6_name">버튼6 횟수 : </span><input class="input_t"type="number" id="Reservation_motor6_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn66_name">버튼6 순서 : </span><input class="input_n"type="number" id="Reservation_motor6_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn7_name">버튼7 횟수 : </span><input class="input_t"type="number" id="Reservation_motor7_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn77_name">버튼7 순서 : </span><input class="input_n"type="number" id="Reservation_motor7_order" placeholder="순서 숫자 입력"></input></li><br>
+			<li><span id = "Btn8_name">버튼8 횟수 : </span><input class="input_t"type="number" id="Reservation_motor8_count" placeholder="횟수 숫자 입력"></input></li>
+			<li><span id = "Btn88_name">버튼8 순서 : </span><input class="input_n"type="number" id="Reservation_motor8_order" placeholder="순서 숫자 입력"></input></li><br>
+		</ul>
+	</form>
+
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+	<script>
+		$('.Btn_set0').hide();
+		$('.Btn_set1').hide();
+		$('.device').hide();
+		$('.device1').hide();
+		$('.Input__list').hide();
+		$('.Reservation__Input__list').hide();
+		$('#power_consume').click(function(){
+		var input = prompt('에너지 소비효율 표시를 참고하세요.\n[W] 단위 숫자만 입력하세요.');
+		document.getElementById("power_consume").value= input;
+		window.open('https://firebasestorage.googleapis.com/v0/b/iot-project-226cc.appspot.com/o/energy.jfif?alt=media&token=a0bd3916-c673-45a2-93e1-9b7592fd870e');
+	});
+
+	</script>
+
+</body>
+
+</html>
