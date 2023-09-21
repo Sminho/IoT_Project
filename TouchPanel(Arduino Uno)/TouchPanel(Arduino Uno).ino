@@ -36,10 +36,10 @@ SoftwareSerial soft(12,13); //12 RX 13 TX
 // (on the 2-row header at the end of the board).
 
 // Assign human-readable names to some common 16-bit color values:
-#define	BLACK   0x0000
-#define	BLUE    0x001F
-#define	RED     0xF800
-#define	GREEN   0x07E0
+#define  BLACK   0x0000
+#define BLUE    0x001F
+#define RED     0xF800
+#define GREEN   0x07E0
 #define CYAN    0x07FF
 #define MAGENTA 0xF81F
 #define YELLOW  0xFFE0
@@ -76,7 +76,6 @@ SoftwareSerial soft(12,13); //12 RX 13 TX
 #define BUTTON_SPACING_X 30
 #define BUTTON_SPACING_Y 30
 #define BUTTON_TEXTSIZE 3
-
 // text box where numbers go
 #define TEXT_X 10
 #define TEXT_Y 10
@@ -154,7 +153,7 @@ void setup(void) {
   tft.println("Machine : Washer    ");
 
   tft.fillTriangle(430, 50, 430, 10, 470, 30, CYAN);
-  tft.fillTriangle(420, 50, 420, 10, 380, 30, CYAN);
+  //tft.fillTriangle(420, 50, 420, 10, 380, 30, CYAN);
   tft.setTextColor(WHITE);
   tft.setTextSize(2); 
   tft.fillRect(5,65,110,120,BLUE);
@@ -250,7 +249,7 @@ void loop(void) {
       Serial.println(Input);
       Input.trim();
 
-      if(Input == "Available" &&){
+      if(Input == "Available"){
         inputAvailable = true;
         Serial.println(inputAvailable);
       }
@@ -408,6 +407,82 @@ void loop(void) {
          tft.setTextSize(2);
          tft.println("PRESSED");
          delay(300);
+         tft.fillRect(365,195,110,120,BLUE);
+         tft.setCursor(368,225);
+         tft.println("Button 8");
+         tft.setCursor(368,270);
+         tft.print("Count: ");
+         tft.println(Btn8_count);
+      }
+      if( p.x < 85 && p.x > 5 && p.y > 5 && p.y < 35){
+         Btn1_count = 0;
+         Btn2_count = 0;
+         Btn3_count = 0;
+         Btn4_count = 0;
+         Btn5_count = 0;
+         Btn6_count = 0;
+         Btn7_count = 0;
+         Btn8_count = 0;
+         
+         Input = "STOP";
+         soft.println(Input);
+         //Serial.println("sent");
+         tft.fillTriangle(430, 50, 430, 10, 470, 30, YELLOW);
+         delay(300);
+         tft.fillTriangle(430, 50, 430, 10, 470, 30, CYAN);
+
+         tft.setTextColor(WHITE);
+         tft.setTextSize(2);
+
+         tft.fillRect(5,65,110,120,BLUE);
+         tft.setCursor(8,90);  
+         tft.println("Button 1");
+         tft.setCursor(8,135); 
+         tft.print("Count: ");
+         tft.println(Btn1_count);
+         
+         tft.fillRect(125,65,110,120,BLUE);
+         tft.setCursor(128,90); 
+         tft.println("Button 2");
+         tft.setCursor(128,135); 
+         tft.print("Count: ");
+         tft.println(Btn2_count);
+         
+         tft.fillRect(245,65,110,120,BLUE);
+         tft.setCursor(248,90); 
+         tft.println("Button 3");
+         tft.setCursor(248,135); 
+         tft.print("Count: ");
+         tft.println(Btn3_count);
+
+         tft.fillRect(365,65,110,120,BLUE);
+         tft.setCursor(368,90); 
+         tft.println("Button 4");
+         tft.setCursor(368,135); 
+         tft.print("Count: ");
+         tft.println(Btn4_count);
+
+         tft.fillRect(5,195,110,120,BLUE);
+         tft.setCursor(8,225);
+         tft.println("Button 5");
+         tft.setCursor(8,270);
+         tft.print("Count: ");
+         tft.println(Btn5_count);
+
+         tft.fillRect(125,195,110,120,BLUE);
+         tft.setCursor(128,225);
+         tft.println("Button 6");
+         tft.setCursor(128,270);
+         tft.print("Count: ");
+         tft.println(Btn6_count);
+
+         tft.fillRect(245,195,110,120,BLUE);
+         tft.setCursor(248,225);
+         tft.println("Button 7");
+         tft.setCursor(248,270);
+         tft.print("Count: ");
+         tft.println(Btn7_count);
+
          tft.fillRect(365,195,110,120,BLUE);
          tft.setCursor(368,225);
          tft.println("Button 8");
