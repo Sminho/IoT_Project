@@ -14,11 +14,6 @@
  * Serial 통신으로 Uno에서 입력되는 터치 값 받아오기
  * ->WiFi가 웹 연결된 상태에서 Serial이 입력되면,
  * ->WiFi 해제, BLE 연결->명령 전달->명령입력 후 다시 웹 연결
- * 
- * Flow
- * 1. WiFi, Database 연결
- * 2. Database에서 저장된 정보(터치 입력들어오면 사용함) 가져옴
- * 3. 대기상태(20초 정도에 한번씩
  */
 
 
@@ -31,8 +26,8 @@
 #define FIREBASE_AUTH "gdNj69DbFna6SUlEpWgfcQyziTM1amW9qAx0k0eh"
 FirebaseData firebaseData;
 
-const char* WIFI_SSID     = "KT_GiGA_09C4";    // 연결할 WiFi
-const char* WIFI_PASSWORD = "9ed24hz345";     // 연결할 WiFi의 비밀번호
+const char* WIFI_SSID     = "Dosirak_4202136";    // 연결할 WiFi
+const char* WIFI_PASSWORD = "93122194";     // 연결할 WiFi의 비밀번호
 
 //BLE 관련 값, 변수
 static BLEUUID serviceUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -42,6 +37,7 @@ static BLEUUID txUUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
 static boolean doConnect = false;
 static boolean connected = false;
 static boolean doScan = false;
+static boolean falseinput = false;
 
 static BLERemoteCharacteristic* pRxCharacteristic;
 static BLERemoteCharacteristic* pTxCharacteristic;
@@ -49,6 +45,7 @@ static BLEAdvertisedDevice* myDevice;
 
 // WIFI, Database 연결
 void WIFIinit(){
+  WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD); // 잠시 꺼야하면 WiFi.mode(WIFI_OFF);
   while ((!(WiFi.status() == WL_CONNECTED))){
     delay(300);
@@ -195,48 +192,39 @@ void setup(){
 String Angle[10];
 String command[50];    // 웹에서 받아온 명령어
 String CmdToSend[50];  // 컨트롤러로 보낼 명령어
-boolean initalized = true;
 
 void loop()
 {
  int command_index = 0;
- int initalized;
  String command_ref = "";
  String command_directory = "";
  unsigned long StartTime;
-
- if(initalized == true){
-  StartTime = millis(); //이걸로 루프 안에서 20초에 한번 정도씩 웹에서 데이터를 가져 옴
-  initalized = false;
- }
+ 
  Serial2.println("Available");
-
  /*
   * 일단 조건문으로 DB값이 존재해야->Do-While 반복문 진입
   * do while이 끝나면->command[1]부터 입력값 저장 마지막에는 Done 저장
  */
- if(Firebase.RTDB.getString(&firebaseData, "/WasherInfo/1")&& Angle[0] != "STOP"){
+ if(Firebase.RTDB.getString(&firebaseData, "/DEMOInfo/1")&& Angle[0] != "STOP" ){
   do{
   command_index += 1;
-  Serial2.println("Not Available");
-  command_ref = "/WasherInfo/";
+  command_ref = "/DEMOInfo/";
   command_directory = command_ref+command_index;
   Firebase.RTDB.getString(&firebaseData, command_directory);
   Angle[command_index] = firebaseData.stringData();
   //Serial.println(Angle[command_index]);
   }while(command_index != 8);
-  Angle[0] = "STOP";
+  Angle[0] = "STOP"; //STOP이 들어가니 이후에는 반복하지 않는다. 최초 실행시에만
   Serial.println("Success 1");
  }
  
  command_index = 0;
- if(StartTime + 20000 < millis() && Firebase.RTDB.getString(&firebaseData, "/Washer/1") && firebaseData.stringData() != "STOP"){
-  Serial2.println("Not Available");
-  initalized = true;
-  Firebase.RTDB.setInt(&firebaseData, "/Washer/Status",1); // 1은 읽는 상태
+ if(Firebase.RTDB.getString(&firebaseData, "/DEMO/1") && firebaseData.stringData() != "STOP" && Firebase.RTDB.getString(&firebaseData, "/DEMO/Status") && firebaseData.stringData() == "0")
+ {
+  Firebase.RTDB.setInt(&firebaseData, "/DEMO/Status",2); // 1은 읽는 상태
   do{
     command_index += 1;
-    command_ref = "/Washer/";
+    command_ref = "/DEMO/";
     command_directory = command_ref+command_index;
     
     Firebase.RTDB.getString(&firebaseData, command_directory);
@@ -248,8 +236,8 @@ void loop()
 
     // 마지막 명령이 되면 1번 명령을 STOP으로 바꿔서 DB를 다시 불러오지 않게 함
     if(firebaseData.stringData() == "STOP"){
-      Firebase.RTDB.setString(&firebaseData, "/Washer/1","STOP");
-      Firebase.RTDB.setInt(&firebaseData, "/Washer/Status",0); // 0은 입력을 받는 상태
+      Firebase.RTDB.setString(&firebaseData, "/DEMO/1","STOP");
+      Firebase.RTDB.setInt(&firebaseData, "/DEMO/Status",0); // 0은 입력을 받는 상태
     }
   }while(command[command_index] != "STOP");
 
@@ -257,7 +245,6 @@ void loop()
   */
   command_index = 0;
   if(command[1] != NULL){
-   Serial2.println("Not Available");
    do{
       command_index += 1;
       if(command[command_index] == "STOP"){
@@ -274,40 +261,34 @@ void loop()
   }
   Serial.println("Success 2");
  }
-
- //이 함수에서 Wifi끄고, BLE켜서 명령 전달
+ 
  command_index = 0;
- if(CmdToSend[0] == "WORK"){
+ if(CmdToSend[0] == "WORK")
+ {
   Serial2.println("Not Available");
-  Firebase.RTDB.setInt(&firebaseData, "/Washer/Status",2); // 2는 입력을 전달하는 상태
-  WiFi.mode(WIFI_OFF);
+  Firebase.RTDB.setInt(&firebaseData, "/DEMO/Status",3); // 2는 입력을 전달하는 상태
   WiFi.disconnect();
+  WiFi.mode(WIFI_OFF);
   Serial.println("WiFi OFF");
-  delay(1500);
+  delay(1000);
   
   BLEinit(); //BLE를 켜고 명령 전달
-  delay(1500);
+  delay(1000);
   do{
     command_index += 1;
     Send(CmdToSend[command_index]);
-    delay(3000);
+    delay(2000);
   }while(CmdToSend[command_index] != "STOP");
   CmdToSend[0] = "STOP";
   
-  if(BLEDevice::getInitialized()){
-    BLEDevice::deinit(false);
-    Serial.println("BLE OFF");
-  }; //BLE 끄고
-  delay(1500);
-  WIFIinit(); //WiFi 다시 연결
-  delay(1500);
-  Firebase.RTDB.setInt(&firebaseData, "/Washer/Status",0); // 0은 입력을 받는 상태
+  ESP.restart();
  }
  
  String text = "";
  command_index = 0;
- if( Serial2.available() > 0){
-  command_index += 1;
+ if( Serial2.available() > 0) //이후는 Serial2(아두이노 입력이 들어오면 작동)
+ {
+    command_index += 1;
   
   text = Serial2.readStringUntil('\n');
   //Serial.println(text);
@@ -318,37 +299,51 @@ void loop()
 
       if(text.equals("Button 1")){
         CmdToSend[command_index] = Angle[1];
+        falseinput = false;
       }
       else if(text.equals("Button 2")){
         CmdToSend[command_index] = Angle[2];
+        falseinput = false;
       }
       else if(text.equals("Button 3")){
         CmdToSend[command_index] = Angle[3];
+        falseinput = false;
       }
       else if(text.equals("Button 4")){
         CmdToSend[command_index] = Angle[4];
+        falseinput = false;
       }
       else if(text.equals("Button 5")){
         CmdToSend[command_index] = Angle[5];
+       falseinput = false;
       }
       else if(text.equals("Button 6")){
         CmdToSend[command_index] = Angle[6];
+        falseinput = false;
       }
       else if(text.equals("Button 7")){
         CmdToSend[command_index] = Angle[7];
+        falseinput = false;
       }
       else if(text.equals("Button 8")){
         CmdToSend[command_index] = Angle[8];
+        falseinput = false;
       }
-      else{
+      else if(text.equals("STOP")){
           CmdToSend[command_index] = "STOP";
+          falseinput = false;
+        }
+      else {
+          Serial.print("error");
+          command_index = 0;
+           falseinput = true;
         }
       Serial.print(command_index);
       Serial.print(" : ");
       Serial.println(CmdToSend[command_index]);
       
     StartTime = millis(); // 여기서 StratTime을 공유해도 30초 후 빠져나가서 DB확인을 하게 됨
-    do{
+   do{
      if( Serial2.available() > 0){
         command_index += 1;
       
@@ -361,47 +356,62 @@ void loop()
         
          if(text.equals("Button 1")){
           CmdToSend[command_index] = Angle[1];
+          falseinput = false;
         }
         else if(text.equals("Button 2")){
           CmdToSend[command_index] = Angle[2];
+          falseinput = false;
         }
         else if(text.equals("Button 3")){
           CmdToSend[command_index] = Angle[3];
+          falseinput = false;
         }
         else if(text.equals("Button 4")){
           CmdToSend[command_index] = Angle[4];
+          falseinput = false;
         }
         else if(text.equals("Button 5")){
           CmdToSend[command_index] = Angle[5];
+          falseinput = false;
         }
         else if(text.equals("Button 6")){
           CmdToSend[command_index] = Angle[6];
+          falseinput = false;
         }
         else if(text.equals("Button 7")){
           CmdToSend[command_index] = Angle[7];
+          falseinput = false;
         }
         else if(text.equals("Button 8")){
           CmdToSend[command_index] = Angle[8];
+          falseinput = false;
         }
-        else{
-            CmdToSend[command_index] = "STOP";
-          }
+        else if(text.equals("STOP")){
+          CmdToSend[command_index] = "STOP";
+          falseinput = false;
+          break;
+        }
+        else if(falseinput == true){
+          Serial.print("break");
+          break;
+        }
         
       Serial.print(command_index);
       Serial.print(" : ");
       Serial.println(CmdToSend[command_index]);
      }
-   }while(StartTime + 30000 > millis());
+   }while(StartTime + 30000 > millis()); //30초가 지나거나 WORK 신호가 들어오면 동작한다
        command_index += 1;
        CmdToSend[command_index] = "STOP";
        Serial.print(command_index);
        Serial.print(" : ");
        Serial.println(CmdToSend[command_index]);
-       CmdToSend[0] = "WORK";
-    /*
-    Firebase.RTDB.setInt(&firebaseData, "/Washer/Status",2); // 2는 입력을 전달하는 상태
-    WiFi.mode(WIFI_OFF);
+   if(falseinput == false){
+    Firebase.RTDB.setInt(&firebaseData, "/DEMO/Status",3); // 2는 입력을 전달하는 상태
+    Serial2.println("Not Available");
     WiFi.disconnect();
+    WiFi.mode(WIFI_OFF);
+
     Serial.println("WiFi OFF");
     delay(1000);
     BLEinit();
@@ -410,18 +420,12 @@ void loop()
     command_index = 1;
     do{
     Send(CmdToSend[command_index]);
-    command_index += 2;
-    delay(4000);
+    command_index += 1;
+    delay(2000);
     }while(CmdToSend[command_index] != "STOP");
     
-    if(BLEDevice::getInitialized()){
-      BLEDevice::deinit(false);
-      Serial.println("BLE OFF");
-    }; //BLE 끄고
-    
-    delay(1000);
-    WIFIinit(); //WiFi 다시 연결
-    */
-    }
+    ESP.restart();
+   }
+ }
  delay(1000);
 }
