@@ -11,7 +11,7 @@
 [![Video Label](http://img.youtube.com/vi/4uXna_kEQ04/0.jpg)](https://youtu.be/4uXna_kEQ04)
 
 
-제 2회 AI•ICT 창의자율과제(2022.3~2022.12)공모전 은상 수상 과제물입니다.
+제 2회 AI•ICT 창의자율과제(2022.3~2022.12)공모전 은상 수상
 -
 <img src="https://user-images.githubusercontent.com/13104540/230714186-d7019008-b375-43e1-b6c6-bfa2cfab9bf3.jpg"  width="210" height="300"><img src="https://github.com/Sminho/IoT_Project/assets/13104540/a6f2b6cc-c3dd-4c27-99fa-39ce7f58c8fb"  width="210" height="300">
 
