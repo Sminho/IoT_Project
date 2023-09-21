@@ -25,3 +25,25 @@ ITRC 인재양성대전 2023 (2023.4.19~2023.4.21)
 
 -이미지는 클릭시 확대됩니다-
 
+구성요소
+-
+1. Switch - 버튼을 누르거나 회전하는 역할을 대신하는 장치
+![슬라이드10](https://github.com/Sminho/IoT_Project/assets/13104540/e882907a-25ff-449f-9ef0-256fea337458)
+이미지에 언급된 모터들과 3D 모델링으로 구현
+
+3. Controller - 위의 Switch 장치들을 연결하는 역할
+![슬라이드13](https://github.com/Sminho/IoT_Project/assets/13104540/098f3dcd-7898-4330-9e2f-aabca91077dc)
+![스크린샷 2023-09-21 224257](https://github.com/Sminho/IoT_Project/assets/13104540/89149303-8b2d-4334-879f-4a1112868ff7)
+![스크린샷 2023-09-21 224328](https://github.com/Sminho/IoT_Project/assets/13104540/0353b343-a401-4828-900a-db5688d2a13f)
+EasyEDA를 이용해 설계하고 만든 PCB (https://oshwlab.com/smh9800/pcb-practice1_copy_copy_copy 참고)
+
+
+5. Hub - 컨트롤러를 WiFi를 통해서 외부망(Firebase)에 연결
+![슬라이드14](https://github.com/Sminho/IoT_Project/assets/13104540/72b45e03-65cb-4917-8333-28a25a0074e3)
+![슬라이드15](https://github.com/Sminho/IoT_Project/assets/13104540/07ed7d13-cd99-4a87-9aca-e3779fec633a)
+아두이노(터치LCD쉴드) <-> ESP32(BLE, WiFi)간 시리얼 통신으로 연결하여 사용
+
+7. Web Application - 스마트폰/PC 등을 이용한 제어가 가능하게 함
+![슬라이드19](https://github.com/Sminho/IoT_Project/assets/13104540/da9c1117-efd1-4a62-a373-840c6c494125)
+Firebase를 이용한 어플리케이션
+
