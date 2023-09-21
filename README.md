@@ -3,8 +3,8 @@
 
 연구설명(ITRC 인재양성대전 내용)
 -
-![전시1](https://github.com/Sminho/IoT_Project/assets/13104540/14b2d936-6489-417a-86e5-4c251bcd7534)
 ![전시2](https://github.com/Sminho/IoT_Project/assets/13104540/36576742-73eb-4972-aee8-9c61a301c1a7)
+![전시1](https://github.com/Sminho/IoT_Project/assets/13104540/14b2d936-6489-417a-86e5-4c251bcd7534)
 
 시연 영상(썸네일 클릭시 유튜브로 이동)
 -
