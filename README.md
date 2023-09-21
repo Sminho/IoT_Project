@@ -46,4 +46,5 @@ EasyEDA를 이용해 설계하고 만든 PCB (https://oshwlab.com/smh9800/pcb-pr
 7. Web Application - 스마트폰/PC 등을 이용한 제어가 가능하게 함
 ![슬라이드19](https://github.com/Sminho/IoT_Project/assets/13104540/da9c1117-efd1-4a62-a373-840c6c494125)
 Firebase를 이용한 어플리케이션
+그대로 구현 시 배포를 위한 Node module, Fontawesome 등 라이브러리 추가 후 프로젝트 내용 덮어씌우는 걸 추천합니다.
 
