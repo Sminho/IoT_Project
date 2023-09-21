@@ -22,15 +22,15 @@
 #include <FirebaseESP32.h>
 
 //Wifi하고 Firebase 관련 값, 변수
-#define FIREBASE_HOST "iot-project-226cc-default-rtdb.firebaseio.com"
-#define FIREBASE_AUTH "gdNj69DbFna6SUlEpWgfcQyziTM1amW9qAx0k0eh"
+#define FIREBASE_HOST "Your-Project"
+#define FIREBASE_AUTH "Your-Project"
 FirebaseData firebaseData;
 
-const char* WIFI_SSID     = "Dosirak_4202136";    // 연결할 WiFi
-const char* WIFI_PASSWORD = "93122194";     // 연결할 WiFi의 비밀번호
+const char* WIFI_SSID     = "Your-Project";    // 연결할 WiFi
+const char* WIFI_PASSWORD = "Your-Project";     // 연결할 WiFi의 비밀번호
 
 //BLE 관련 값, 변수
-static BLEUUID serviceUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+static BLEUUID serviceUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E"); //UID는 각 장치에 맞게 생성해서 입력
 static BLEUUID rxUUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
 static BLEUUID txUUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
 
